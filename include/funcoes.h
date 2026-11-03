@@ -1,33 +1,20 @@
-
 #ifndef FUNCOES_H
 #define FUNCOES_H
 
-typedef struct {
-    char nome[50];
-    char categoria[50];
-    int quantidade;
-    float preco_compra;
-    float preco_atual;
-} Ativo;
+#include "módulo.h"
 
-void cadastrarAtivo(Ativo carteira[], int *quantidadeAtivos, int capacidade);
+void cadastrarAtivo(Ativo carteira[], int *quantidade);
 
-void listarAtivos(Ativo carteira[], int quantidadeAtivos);
+void listarAtivos(Ativo carteira[], int quantidade);
 
-float calcularRentabilidade(float precoCompra, float precoAtual);
+float calcularValorTotal(Ativo carteira[], int quantidade);
 
-float calcularLucro(float precoCompra, float precoAtual, int quantidade);
+float calcularRentabilidadeGeral(Ativo carteira[], int quantidade);
 
-void exibirRentabilidadeELucro(Ativo ativo);
+void ordenarPorRentabilidade(Ativo carteira[], int quantidade);
 
-float calcularValorTotal(Ativo carteira[], int quantidadeAtivos);
+void simuladorEducativo(Ativo carteira[], int quantidade);
 
-float calcularRentabilidadeGeral(Ativo carteira[], int quantidadeAtivos);
-
-void classificarRisco(float rentabilidade);
-
-void exibirClassificacaoRisco(Ativo ativo);
-
-void exibirDespedida(void);
+void relatorioFinal(Ativo carteira[], int quantidade);
 
 #endif
