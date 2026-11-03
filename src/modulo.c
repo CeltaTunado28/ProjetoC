@@ -1,52 +1,84 @@
-
+#include <errno.h>
 #include <stdio.h>
-#include "modulo.h"
 
-void salvarCarteira(Ativo carteira[], int quantidadeAtivos) {
-    FILE *arquivo = fopen("data/carteira.txt", "w");
+#if defined(_WIN32)
+#include <direct.h>
+#define MKDIR(path) _mkdir(path)
+#else
+#include <sys/stat.h>
+#include <sys/types.h>
+#define MKDIR(path) mkdir(path, 0777)
+#endif
+
+#include "módulo.h"
+
+#define CAMINHO_CARTEIRA "data/carteira.txt"
+
+static void garantirDiretorioDados(void) {
+    if (MKDIR("data") != 0 && errno != EEXIST) {
+        printf("\nErro ao criar a pasta data/ para armazenamento dos dados.\n");
+    }
+}
+
+void carregarAtivos(Ativo carteira[], int *quantidade) {
+    FILE *arquivo;
+    char linha[300];
+
+    *quantidade = 0;
+    garantirDiretorioDados();
+
+    arquivo = fopen(CAMINHO_CARTEIRA, "r");
 
     if (arquivo == NULL) {
-        printf("Erro ao abrir o arquivo para salvar.\n");
         return;
     }
 
-    for (int i = 0; i < quantidadeAtivos; i++) {
-        fprintf(arquivo, "%s\n", carteira[i].nome);
-        fprintf(arquivo, "%s\n", carteira[i].categoria);
-        fprintf(arquivo, "%d\n", carteira[i].quantidade);
-        fprintf(arquivo, "%.2f\n", carteira[i].preco_compra);
-        fprintf(arquivo, "%.2f\n", carteira[i].preco_atual);
+    while (fgets(linha, sizeof(linha), arquivo) != NULL &&
+           *quantidade < MAX_ATIVOS) {
+
+        Ativo novoAtivo;
+
+        if (sscanf(linha, "%99[^|]|%49[^|]|%d|%f|%f",
+                   novoAtivo.nome,
+                   novoAtivo.categoria,
+                   &novoAtivo.quantidade,
+                   &novoAtivo.precoCompra,
+                   &novoAtivo.precoAtual) == 5) {
+
+            if (novoAtivo.quantidade > 0 &&
+                novoAtivo.precoCompra > 0 &&
+                novoAtivo.precoAtual >= 0) {
+
+                carteira[*quantidade] = novoAtivo;
+
+                (*quantidade)++;
+            }
+        }
     }
 
     fclose(arquivo);
-    printf("Carteira salva com sucesso!\n");
 }
 
-void carregarCarteira(Ativo carteira[], int *quantidadeAtivos, int capacidade) {
-    FILE *arquivo = fopen("data/carteira.txt", "r");
+void salvarAtivos(Ativo carteira[], int quantidade) {
+    FILE *arquivo;
+    int i;
 
-    *quantidadeAtivos = 0;
+    garantirDiretorioDados();
+    arquivo = fopen(CAMINHO_CARTEIRA, "w");
 
     if (arquivo == NULL) {
+        printf("\nErro ao abrir o arquivo para salvar os dados!\n");
         return;
     }
 
-    while (*quantidadeAtivos < capacidade) {
-        int indice = *quantidadeAtivos;
+    for (i = 0; i < quantidade; i++) {
 
-        if (fscanf(arquivo, " %49[^\n]", carteira[indice].nome) != 1) {
-            break;
-        }
-
-        if (fscanf(arquivo, " %49[^\n]", carteira[indice].categoria) != 1 ||
-            fscanf(arquivo, "%d", &carteira[indice].quantidade) != 1 ||
-            fscanf(arquivo, "%f", &carteira[indice].preco_compra) != 1 ||
-            fscanf(arquivo, "%f", &carteira[indice].preco_atual) != 1) {
-            printf("Aviso: dados incompletos no arquivo da carteira.\n");
-            break;
-        }
-
-        (*quantidadeAtivos)++;
+        fprintf(arquivo, "%s|%s|%d|%.2f|%.2f\n",
+                carteira[i].nome,
+                carteira[i].categoria,
+                carteira[i].quantidade,
+                carteira[i].precoCompra,
+                carteira[i].precoAtual);
     }
 
     fclose(arquivo);
