@@ -1,9 +1,18 @@
 #ifndef MODULO_H
 #define MODULO_H
 
-#include "funcoes.h"
+#define MAX_ATIVOS 100
 
-void salvarCarteira(Ativo carteira[], int quantidadeAtivos);
-void carregarCarteira(Ativo carteira[], int *quantidadeAtivos, int capacidade);
+typedef struct {
+    char nome[100];
+    char categoria[50];
+    int quantidade;
+    float precoCompra;
+    float precoAtual;
+} Ativo;
+
+void carregarAtivos(Ativo carteira[], int *quantidade);
+
+void salvarAtivos(Ativo carteira[], int quantidade);
 
 #endif
