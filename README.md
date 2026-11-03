@@ -114,4 +114,8 @@ O projeto tem como objetivo praticar conceitos fundamentais da linguagem C, incl
 
 Além do aprendizado técnico, o projeto busca contribuir com o **ODS 8.10 da ONU**, relacionado à ampliação do acesso aos serviços financeiros, promovendo a educação financeira e apresentando diferentes possibilidades de investimento de maneira simples e acessível.
 
-# Desenvolvedores
+## Desenvolvedores
+
+- Lionel Gonçalves Dantas
+- Julia Alves Kiura
+- Isabella Cristina Nascimento da Cruz Silva
