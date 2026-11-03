@@ -113,3 +113,5 @@ O sistema utiliza arquivos de texto para manter os dados dos ativos salvos, perm
 O projeto tem como objetivo praticar conceitos fundamentais da linguagem C, incluindo estruturas de dados, funções, vetores, ponteiros, passagem de parâmetros, modularização, algoritmos de ordenação e manipulação de arquivos.
 
 Além do aprendizado técnico, o projeto busca contribuir com o **ODS 8.10 da ONU**, relacionado à ampliação do acesso aos serviços financeiros, promovendo a educação financeira e apresentando diferentes possibilidades de investimento de maneira simples e acessível.
+
+# Desenvolvedores
