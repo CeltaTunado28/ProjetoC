@@ -1,80 +1,87 @@
-
 #include <stdio.h>
 #include "funcoes.h"
-#include "modulo.h"
 
-#define CAPACIDADE_CARTEIRA 100
+int main() {
+    Ativo carteira[MAX_ATIVOS];
+    int quantidade = 0;
+    int opcao;
+    int resultado;
 
-int main(void) {
-    Ativo carteira[CAPACIDADE_CARTEIRA];
-    int quantidadeAtivos = 0;
-    int opcao = 0;
+    carregarAtivos(carteira, &quantidade);
 
-    carregarCarteira(
-        carteira,
-        &quantidadeAtivos,
-        CAPACIDADE_CARTEIRA
-    );
-
-    printf("Ativos carregados: %d\n", quantidadeAtivos);
-
-    while (opcao != 5) {
-        printf("\n=== Carteira de Investimentos ===\n");
+    do {
+        printf("\n=== CARTEIRA DE INVESTIMENTOS ===\n");
         printf("1. Cadastrar ativo\n");
         printf("2. Listar ativos\n");
-        printf("3. Ver valor total da carteira\n");
-        printf("4. Ver rentabilidade geral\n");
-        printf("5. Sair\n");
+        printf("3. Valor total da carteira\n");
+        printf("4. Rentabilidade geral\n");
+        printf("5. Ordenar por rentabilidade\n");
+        printf("6. Simulador educativo\n");
+        printf("7. Relatorio final\n");
+        printf("0. Sair\n");
         printf("Escolha uma opcao: ");
 
-        if (scanf("%d", &opcao) != 1) {
-            printf("Entrada invalida.\n");
-            salvarCarteira(carteira, quantidadeAtivos);
-            return 1;
+        resultado = scanf("%d", &opcao);
+
+        if (resultado != 1) {
+            printf("\nDigite uma opcao valida!\n");
+
+            while (getchar() != '\n');
+
+            continue;
         }
 
         switch (opcao) {
-            case 1:
-                cadastrarAtivo(
-                    carteira,
-                    &quantidadeAtivos,
-                    CAPACIDADE_CARTEIRA
-                );
 
-                salvarCarteira(carteira, quantidadeAtivos);
+            case 1:
+                cadastrarAtivo(carteira, &quantidade);
+                salvarAtivos(carteira, quantidade);
                 break;
 
             case 2:
-                listarAtivos(carteira, quantidadeAtivos);
+                listarAtivos(carteira, quantidade);
                 break;
 
             case 3:
-                printf(
-                    "Valor total da carteira: R$ %.2f\n",
-                    calcularValorTotal(carteira, quantidadeAtivos)
-                );
+                printf("\n=== VALOR TOTAL ===\n");
+                printf("Valor da carteira: R$ %.2f\n",
+                       calcularValorTotal(carteira, quantidade));
                 break;
 
             case 4:
-                printf(
-                    "Rentabilidade geral: %.2f%%\n",
-                    calcularRentabilidadeGeral(
-                        carteira,
-                        quantidadeAtivos
-                    )
-                );
+                printf("\n=== RENTABILIDADE GERAL ===\n");
+                printf("Rentabilidade: %.2f%%\n",
+                       calcularRentabilidadeGeral(carteira, quantidade));
                 break;
 
             case 5:
-                salvarCarteira(carteira, quantidadeAtivos);
-                exibirDespedida();
+                ordenarPorRentabilidade(carteira, quantidade);
+
+                printf("\nCarteira ordenada com sucesso!\n");
+
+                listarAtivos(carteira, quantidade);
+
+                salvarAtivos(carteira, quantidade);
+                break;
+
+            case 6:
+                simuladorEducativo(carteira, quantidade);
+                break;
+
+            case 7:
+                relatorioFinal(carteira, quantidade);
+                break;
+
+            case 0:
+                salvarAtivos(carteira, quantidade);
+                printf("\nSistema encerrado.\n");
                 break;
 
             default:
-                printf("Opcao invalida. Escolha de 1 a 5.\n");
-                break;
+                printf("\nOpcao invalida!\n");
         }
-    }
+
+    } while (opcao != 0);
 
     return 0;
 }
